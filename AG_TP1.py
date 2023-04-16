@@ -34,7 +34,7 @@ def correr(conjunto_solucion,cant_corridas):
         minimos.append(np.min(resultado))
         promedios.append(np.average(resultado))
 
-def decimal_a_binario(decimal):
+"""def decimal_a_binario(decimal):
     if decimal <= 0:
         return "0"
     # Aquí almacenamos el resultado
@@ -48,7 +48,7 @@ def decimal_a_binario(decimal):
         # Ir agregando el número (1 o 0) a la izquierda del resultado
         binario = str(residuo) + binario
     print(f"El número {decimal} es {binario} en binario")
-    return binario
+    return binario"""
 
 def binario_a_decimal(binario):
     posicion = 0

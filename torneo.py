@@ -23,13 +23,13 @@ def torneo(array):
     nuevoarray = []
     for i in range(len(array)):
         nro1 = random.randint(0,len(array)-1)
-        print(nro1)
         nro2 = random.randint(0,len(array)-1)
-        print(nro2)
         if array[nro1] > array[nro2]:
             nuevoarray.append(array[nro1])
         else:
             nuevoarray.append(array[nro2])
+        print(str(array[nro1]) + " - " + str(array[nro2]) + " => " + str(nuevoarray[i]))
+    print()
     return nuevoarray
 
 """print(intABin(a))

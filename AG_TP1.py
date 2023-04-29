@@ -67,8 +67,8 @@ def main():
     #binario_COEF = decimal_a_binario(Constant.COEF)
     #cant_Genes = len(binario_COEF)
     pob = poblacion_inicial()
-    print("Hola mundo")
     print(pob)
+    print()
     print(torneo(pob))
 
 if __name__ == "__main__":

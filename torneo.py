@@ -1,7 +1,7 @@
 import random
-a = 6
+"""a = 6
 b = "1010"
-c = ["100110","0111001","110110"]
+c = ["100110","0111001","110110"]"""
 
 def intABin(num):
     binario = ""
@@ -26,12 +26,12 @@ def torneo(array):
         print(nro1)
         nro2 = random.randint(0,len(array)-1)
         print(nro2)
-        if binAInt(array[nro1]) > binAInt(array[nro2]):
+        if array[nro1] > array[nro2]:
             nuevoarray.append(array[nro1])
         else:
             nuevoarray.append(array[nro2])
     return nuevoarray
 
-print(intABin(a))
+"""print(intABin(a))
 print(binAInt(b))
-print(torneo(c))
+print(torneo(c))"""

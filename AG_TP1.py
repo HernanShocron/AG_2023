@@ -3,6 +3,7 @@ import matplotlib as plt
 import os
 import math
 import random as r
+from torneo import torneo, intABin, binAInt
 
 class Constant:
     P_CROSSOVER         = 0.75
@@ -65,8 +66,10 @@ def binario_a_decimal(binario):
 def main():
     #binario_COEF = decimal_a_binario(Constant.COEF)
     #cant_Genes = len(binario_COEF)
-    print("Hola mundo")
-    print(poblacion_inicial())
+    pob = poblacion_inicial()
+    print(pob)
+    print()
+    print(torneo(pob))
 
 if __name__ == "__main__":
     main()

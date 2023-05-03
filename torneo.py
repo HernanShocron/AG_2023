@@ -5,10 +5,13 @@ c = ["100110","0111001","110110"]"""
 
 def intABin(num):
     binario = ""
-    while num != 1:
-        binario= str(num%2) + binario
-        num=num//2
-    binario= "1" + binario
+    if num == 0:
+        binario= "0"
+    else:
+        while num != 1:
+            binario= str(num%2) + binario
+            num=num//2
+        binario= "1" + binario
     return binario
 
 def binAInt(num):

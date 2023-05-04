@@ -1,8 +1,9 @@
 import numpy as np
-#import matplotlib as plt
+import matplotlib as plt
 import os
 import math
 import random as r
+import mutacion 
 
 class Constant:
     P_CROSSOVER         = 0.75
@@ -11,20 +12,7 @@ class Constant:
     CICLOS_PROGRAMA     = 20
     COEF                = (2**30) -1
     
-def mutacion(binarioList):
-    for i in range(len(binarioList)):
-        if r.random()< 0.05: 
-            binarioList[i] = str(1 - int(binarioList[i]))
-    return(binarioList)
-    
-def mutar_poblacion(poblacion):
-    poblacion_final=[]
-    for i in range(len(poblacion)):
-        cromosoma_binario=list(np.binary_repr(poblacion[i],30)) #pasa el cormosoma a binario
-        mutacion(cromosoma_binario)
-        cromosoma_decimal=int(''.join(cromosoma_binario),2)#pasa el cromosoma a decimal
-        poblacion_final.append(cromosoma_decimal)#agrega el cromosoma a la nueva poblacion
-    print((poblacion_final))
+
 
 def poblacion_inicial():
     array_poblacion_inicial = []
@@ -54,7 +42,7 @@ def main():
     #cant_Genes = len(binario_COEF)
     a=poblacion_inicial()
     print(a)
-    mutar_poblacion(a)
+    mutacion.mutar_poblacion(a,0.05)
 
 if __name__ == "__main__":
     main()

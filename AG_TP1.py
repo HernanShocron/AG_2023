@@ -4,6 +4,7 @@ import os
 import math
 import random as r
 import mutacion 
+from torneo import torneo, intABin, binAInt
 
 class Constant:
     P_CROSSOVER         = 0.75
@@ -43,6 +44,11 @@ def main():
     a=poblacion_inicial()
     print(a)
     mutacion.mutar_poblacion(a,0.05)
+    pob = poblacion_inicial()
+    print(pob)
+    print()
+    print(torneo(pob))
+
 
 if __name__ == "__main__":
     main()

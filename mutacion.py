@@ -1,8 +1,8 @@
 import numpy as np
 import random as r
 def mutacion(binarioList,p_mutacion):
-    for i in range(len(binarioList)):
-        if r.random()< p_mutacion: 
+    if r.random()< p_mutacion: 
+            i = r.randrange(len(binarioList))
             binarioList[i] = str(1 - int(binarioList[i]))
     return(binarioList)
     
@@ -13,4 +13,5 @@ def mutar_poblacion(poblacion,p_mutacion):
         mutacion(cromosoma_binario,p_mutacion)
         cromosoma_decimal=int(''.join(cromosoma_binario),2)#pasa el cromosoma a decimal
         poblacion_final.append(cromosoma_decimal)#agrega el cromosoma a la nueva poblacion
-    print((poblacion_final))
+    print(poblacion_final)
+    return poblacion_final

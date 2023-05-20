@@ -12,7 +12,7 @@ def MAX_MIN_PROM(maximos,minimos,promedios):
     plt.plot(x,minimos,'r-')
     plt.plot(x,promedios,'b-')
     plt.show()
-
+def Tabla(com_max,maximos,minimos,promedios):
 # /// Prueba de ejecución (se puede borrar) ///
 # maximos = [3,3,4,5,6]
 # minimos = [0,1,1,1,2]

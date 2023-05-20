@@ -37,6 +37,7 @@ def funcion_objetivo(x):
 if __name__ == "__main__":
     poblacion = poblacion_inicial()  # llamada a la funcion que crea poblacion inicial
     maximos = []
+    crom_max=[]
     minimos = []
     promedios = []
     binario_COEF = np.binary_repr(Constant.COEF, 0)
@@ -46,6 +47,7 @@ if __name__ == "__main__":
         resultados = []  # lista de las funciones objetivos de la poblacion actual
         for j in range(len(poblacion)):
             resultados.append(funcion_objetivo(poblacion[j]))
+        crom_max.append(poblacion[resultados.index(np.max(resultados))])
         maximos.append(np.max(resultados))
         minimos.append(np.min(resultados))
         promedios.append(np.average(resultados))

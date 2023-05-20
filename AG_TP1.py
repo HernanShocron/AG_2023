@@ -16,7 +16,7 @@ class Constant:
     POBLACION_INICIAL   = 10
     CICLOS_PROGRAMA     = 20
     COEF                = (2**30) -1
-    ELITISMO               = False # determina si el codigo aplicara elitismo o no, falta aplicarlo en el main
+    APLICA_ELT          = False # determina si el codigo aplicara elitismo o no, falta aplicarlo en el main
 
 def poblacion_inicial():
     array_poblacion_inicial = []

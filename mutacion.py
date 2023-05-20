@@ -9,14 +9,14 @@ def mutacion(binarioList, p_mutacion):
     return (binarioList)
 
 
-def mutar_poblacion(poblacion, p_mutacion):
+def mutar_poblacion(poblacion, p_mutacion, largo_gen):
     poblacion_final = []
     for i in range(len(poblacion)):
         # pasa el cormosoma a binario
-        cromosoma_binario = list(np.binary_repr(poblacion[i], 30))
+        cromosoma_binario = list(np.binary_repr(poblacion[i], largo_gen))
         mutacion(cromosoma_binario, p_mutacion)
         # pasa el cromosoma a decimal
-        cromosoma_decimal = int(''.join(cromosoma_binario), 2)
+        cromosoma_decimal=int(''.join(cromosoma_binario), 2)
         # agrega el cromosoma a la nueva poblacion
         poblacion_final.append(cromosoma_decimal)
 

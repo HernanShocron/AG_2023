@@ -55,7 +55,7 @@ if __name__ == "__main__":
         # pob_selec,const_cross,largo_gen -> poblacion_hijos 
         poblacion = CrossOver.CrossOver(poblacion, Constant.P_CROSSOVER, cant_Genes)
         print(poblacion)
-        # poblacion,const_mut -> poblacion final
-        poblacion = mutacion.mutar_poblacion(poblacion, Constant.P_MUTACION)
+        # poblacion,const_mut,largo_gen -> poblacion final
+        poblacion = mutacion.mutar_poblacion(poblacion, Constant.P_MUTACION ,cant_Genes)
 
         break

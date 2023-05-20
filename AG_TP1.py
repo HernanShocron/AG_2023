@@ -3,8 +3,8 @@ import matplotlib as plt
 import os
 import math
 import random as r
-import Mutacion 
-import Torneo
+import mutacion 
+import torneo
 import Fitness
 import Ruleta
 import CrossOver
@@ -29,20 +29,20 @@ def funcion_objetivo(x): #se cambio el nombre para no confundir con la funcion f
     return (x/Constant.COEF)**2
 
 if __name__ == "__main__":
-    poblacion = poblacion_inicial()    
+    poblacion = poblacion_inicial()  #llamada a la funcion que crea poblacion inicial  
     maximos = []
     minimos = []
     promedios = []
     binario_COEF = np.binary_repr(Constant.COEF,0)
-    cant_Genes = len(binario_COEF)
+    cant_Genes = len(binario_COEF) #largo de los genes
     print(cant_Genes)
     for i in range(Constant.CICLOS_PROGRAMA):
-        resultados = [] 
+        resultados = [] #lista de las funciones objetivos de la poblacion actual
         for j in range(len(poblacion)):
             resultados.append(funcion_objetivo(poblacion[j]))
         maximos.append(np.max(resultados))
         minimos.append(np.min(resultados))
         promedios.append(np.average(resultados))
-        poblacion = Ruleta.seleccion(poblacion,Fitness.Fitness(resultados),Constant.POBLACION_INICIAL)
-        print(CrossOver.CrossOver(poblacion, Constant.P_CROSSOVER, cant_Genes))
+        poblacion = Ruleta.seleccion(poblacion,Fitness.Fitness(resultados),Constant.POBLACION_INICIAL) #poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
+        print(CrossOver.CrossOver(poblacion, Constant.P_CROSSOVER, cant_Genes))#pob_selec,cost,largo_gen -> poblacion_hijos en binario
         break 

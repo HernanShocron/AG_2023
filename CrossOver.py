@@ -6,7 +6,7 @@ def CrossOver(poblacion, probabilidad, cant_gen):
     listaBinario = []
 
     for i in range(len(poblacion)):
-        listaBinario.append(py.binary_repr(poblacion[i],cant_gen))
+        listaBinario.append(py.binary_repr(poblacion[i],cant_gen)) #pasa los genes a binaro
 
     for i in range(0,len(poblacion),2):
         if r.random() <= probabilidad:

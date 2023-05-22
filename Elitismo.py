@@ -12,7 +12,5 @@ def elitismo(poblacion, pobl_fit, nroElitismo):
                 buffer = pobl_fit[i]
                 pobl_fit[i] = pobl_fit[j]
                 pobl_fit[j] = buffer
-    elite = []
-    for i in range(nroElitismo):
-        elite[i] = poblacion_ordenada[i]
+    elite = poblacion_ordenada[:nroElitismo]
     return elite

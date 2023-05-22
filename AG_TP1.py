@@ -16,9 +16,9 @@ class Constant:
     P_CROSSOVER = 0.75
     P_MUTACION = 0.05
     POBLACION_INICIAL = 10
-    CICLOS_PROGRAMA = 100
+    CICLOS_PROGRAMA = 10
     COEF = (2**30) - 1
-    ELIT = 0
+    ELIT = 2
 
 
 def poblacion_inicial():
@@ -54,12 +54,13 @@ if __name__ == "__main__":
         maximos.append(np.max(resultados))
         minimos.append(np.min(resultados))
         promedios.append(np.average(resultados))
-
+        print(poblacion)
+        
         # poblacion, fitnae_pob, cant_elit ->elit
         elit= Elitismo.elitismo(poblacion, Fitness.Fitness( resultados), Constant.ELIT) 
-        
+        print(poblacion)
         # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
-        print(Constant.POBLACION_INICIAL - Constant.ELIT)
+        
         poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness( resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
         
 

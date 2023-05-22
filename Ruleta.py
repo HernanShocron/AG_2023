@@ -4,9 +4,9 @@ import numpy as np
 def seleccion(poblacion,fitness,cantidad_poblacion):
     print("*** Seleccion_ruleta ***")
     cromosomas = []
-    for i in range(cantidad_poblacion):                 # Se tiene que generar una nueva población igual en tamaño a la población inicial a partir de los resultados anteriores obtenidos
+    for i in range(cantidad_poblacion):                 # Se tiene que generar una nueva población a partir de los resultados anteriores obtenidos
         seleccion = r.random()                          # Devuelve un valor entre 0 y 1 y se almacena en una variable de selección
-        for j in range(cantidad_poblacion):                   # Recorre la colección de firness
+        for j in range(len(poblacion)):                   # Recorre la colección de firness
             if seleccion <= fitness[j]:                 # Si el numero aleatorio es menor ó igual al fitness actual, quiere decir que cayó en su rango
                 cromosomas.append(poblacion[j])        # Se agrega el cromosoma relacionado en la coleccion resultado a la nueva población de cromosomas
                 break

@@ -11,15 +11,13 @@ import CrossOver
 import Elitismo
 import Graficar
 
-
 class Constant:
     P_CROSSOVER = 0.75
     P_MUTACION = 0.05
     POBLACION_INICIAL = 10
-    CICLOS_PROGRAMA = 10
+    CICLOS_PROGRAMA = 100
     COEF = (2**30) - 1
     ELIT = 2
-
 
 def poblacion_inicial():
     array_poblacion_inicial = []
@@ -61,12 +59,11 @@ if __name__ == "__main__":
         print(poblacion)
         # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
         
-        poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness( resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
-        
+        # poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
+        poblacion = torneo.torneo(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
 
         # pob_selec,const_cross,largo_gen -> poblacion_hijos
-        poblacion = CrossOver.CrossOver( poblacion, Constant.P_CROSSOVER, cant_Genes)
-      
+        poblacion = CrossOver.CrossOver( poblacion, Constant.P_CROSSOVER, cant_Genes)      
 
         # poblacion,const_mut,largo_gen -> poblacion final
         poblacion = mutacion.mutar_poblacion(

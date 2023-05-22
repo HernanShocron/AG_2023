@@ -20,6 +20,8 @@ def Tabla(crom_max, maximos, minimos, promedios):
     print("Nro_iteracion \t Comosoma \t Maximo \t\t Minimo \t \t Promedio")
     for i in range(len(crom_max)):
         print((i+1), '\t\t',crom_max[i] ,'\t', maximos[i], '\t', minimos[i],'\t', promedios[i])
+
+
 # /// Prueba de ejecución (se puede borrar) ///
 # maximos = [3,3,4,5,6]
 # minimos = [0,1,1,1,2]

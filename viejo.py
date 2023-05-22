@@ -18,7 +18,8 @@ class Constant:
     POBLACION_INICIAL = 10
     CICLOS_PROGRAMA = 100
     COEF = (2**30) - 1
-    ELIT = 0
+    # determina si el codigo aplicara elitismo o no, falta aplicarlo en el main
+    APLICA_ELT = False
 
 
 def poblacion_inicial():
@@ -40,7 +41,6 @@ if __name__ == "__main__":
     crom_max = []
     minimos = []
     promedios = []
-    elit =[]
     binario_COEF = np.binary_repr(Constant.COEF, 0)
     cant_Genes = len(binario_COEF)  # largo de los genes
     print(cant_Genes)
@@ -48,31 +48,21 @@ if __name__ == "__main__":
         resultados = []  # lista de las funciones objetivos de la poblacion actual
         for j in range(len(poblacion)):
             resultados.append(funcion_objetivo(poblacion[j]))
-
-        #calcula max, min y promedio
         crom_max.append(poblacion[resultados.index(np.max(resultados))])
         maximos.append(np.max(resultados))
         minimos.append(np.min(resultados))
         promedios.append(np.average(resultados))
-
-        # poblacion, fitnae_pob, cant_elit ->elit
-        elit= Elitismo.elitismo(poblacion, Fitness.Fitness( resultados), Constant.ELIT) 
-        
         # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
-        print(Constant.POBLACION_INICIAL - Constant.ELIT)
-        poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness( resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
-        
-
+        poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(
+            resultados), Constant.POBLACION_INICIAL)
+        print(poblacion)
         # pob_selec,const_cross,largo_gen -> poblacion_hijos
-        poblacion = CrossOver.CrossOver( poblacion, Constant.P_CROSSOVER, cant_Genes)
-      
-
+        poblacion = CrossOver.CrossOver(
+            poblacion, Constant.P_CROSSOVER, cant_Genes)
+        print(poblacion)
         # poblacion,const_mut,largo_gen -> poblacion final
         poblacion = mutacion.mutar_poblacion(
             poblacion, Constant.P_MUTACION, cant_Genes)
-        
-        #Agrega a la poblacion seleccionada los cromosomas elites
-        poblacion=poblacion+elit
 
     Graficar.Tabla(crom_max,maximos,minimos,promedios)
     Graficar.MAX_MIN_PROM(maximos,minimos,promedios)   

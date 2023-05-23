@@ -2,7 +2,6 @@ import random as r
 import numpy as np
 
 def seleccion(poblacion,fitness,cantidad_poblacion):
-    print("*** Seleccion_ruleta ***")
     cromosomas = []
     for i in range(cantidad_poblacion):                 # Se tiene que generar una nueva población a partir de los resultados anteriores obtenidos
         seleccion = r.random()                          # Devuelve un valor entre 0 y 1 y se almacena en una variable de selección
@@ -22,5 +21,3 @@ def seleccion(poblacion,fitness,cantidad_poblacion):
 # print()
 # cromosomas = seleccion(resultados,fitness,5)
 # print(cromosomas)
-
-

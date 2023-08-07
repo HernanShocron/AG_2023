@@ -6,17 +6,24 @@ import operator as op
 
 class Constant :
     OBJETOS = np.array((
-        [1, 150,    20],
-        [2, 325,    40],
-        [3, 600,    50],
-        [4, 805,    36],
-        [5, 430,    25],
-        [6, 1200,   64],
-        [7, 770,    54],
-        [8, 60,     18],
-        [9, 930,    46],
-        [10,353,    28]))
-    VOLUMEN_MAXIMO      = 4200
+        [1, 1800,   72],
+        [2, 600,    36],
+        [3, 1200,   60]))
+    Maximo      = 3000
+
+# class Constant :
+#     OBJETOS = np.array((
+#         [1, 150,    20],
+#         [2, 325,    40],
+#         [3, 600,    50],
+#         [4, 805,    36],
+#         [5, 430,    25],
+#         [6, 1200,   64],
+#         [7, 770,    54],
+#         [8, 60,     18],
+#         [9, 930,    46],
+#         [10,353,    28]))
+#     Maximo      = 4200    
 
 def ValuarObjetos(OBJETOS):
     ObjetosValuados = []
@@ -29,13 +36,13 @@ def ValuarObjetos(OBJETOS):
 def main():
     ObjetosValuados = ValuarObjetos(Constant.OBJETOS)
     ObjetosSeleccionados = []
-    SumaVolumen = 0
+    SumaMochila = 0
     SumaValor = 0
-    CasoBinario = [0,0,0,0,0,0,0,0,0,0]
+    CasoBinario = [0] * len(Constant.OBJETOS)
     for Objeto in ObjetosValuados:
-        if SumaVolumen + Objeto[1] <= Constant.VOLUMEN_MAXIMO:
+        if SumaMochila + Objeto[1] <= Constant.Maximo:
             ObjetosSeleccionados.append(Objeto)
-            SumaVolumen += Objeto[1]
+            SumaMochila += Objeto[1]
             SumaValor += Objeto[2]
             CasoBinario[Objeto[0]-1] = 1
     for Objeto in ObjetosSeleccionados:

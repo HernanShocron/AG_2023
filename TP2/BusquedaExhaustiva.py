@@ -1,7 +1,5 @@
-# For Commenting press CTRL + k + c
-# For Uncomment press CTRL + k + u
-
 import numpy as np
+import time
 
 class Constant :
    OBJETOS = np.array((
@@ -26,7 +24,7 @@ class Constant :
 #     CANTIDAD_CASOS      = 2**len(OBJETOS) 
 #     MAXIMO      = 4200 
 
-def busquedaExaustiva(OBJETOS,CANTIDAD_OBJETOS,CANTIDAD_CASOS):
+def busquedaExhaustiva(OBJETOS,CANTIDAD_OBJETOS,CANTIDAD_CASOS):
     CasosValidos = []
     MejorCaso = []
     for i in range(0,CANTIDAD_CASOS):
@@ -65,11 +63,12 @@ def evaluar(OBJETOS,MAXIMO,CasoBinario,CasosValidos = []):
     return CasosValidos
 
 def main():
-    MejorCaso = busquedaExaustiva(Constant.OBJETOS,len(Constant.OBJETOS),Constant.CANTIDAD_CASOS)
-    
+    start = time.time()
+    MejorCaso = busquedaExhaustiva(Constant.OBJETOS,len(Constant.OBJETOS),Constant.CANTIDAD_CASOS)
+    end = time.time()
+    print(f"Tiempo de ejecucion {end-start}") 
     for item in MejorCaso:
         print("El Mejor Caso es: "+str(item))
-
 
 if __name__ == '__main__':
     main()

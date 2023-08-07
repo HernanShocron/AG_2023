@@ -1,8 +1,6 @@
-# For Commenting press CTRL + k + c
-# For Uncomment press CTRL + k + u
-
 import numpy as np
 import operator as op
+import time
 
 class Constant :
     OBJETOS = np.array((
@@ -23,7 +21,7 @@ class Constant :
 #         [8, 60,     18],
 #         [9, 930,    46],
 #         [10,353,    28]))
-#     Maximo      = 4200    
+#     Maximo      = 4200
 
 def ValuarObjetos(OBJETOS):
     ObjetosValuados = []
@@ -34,6 +32,7 @@ def ValuarObjetos(OBJETOS):
     return ObjetosValuados
 
 def main():
+    start = time.time()
     ObjetosValuados = ValuarObjetos(Constant.OBJETOS)
     ObjetosSeleccionados = []
     SumaMochila = 0
@@ -47,8 +46,10 @@ def main():
             CasoBinario[Objeto[0]-1] = 1
     for Objeto in ObjetosSeleccionados:
         print(str(Objeto))
+    end = time.time()
+    print(f"Tiempo de ejecucion {end-start}")
     print(CasoBinario)
     print('El valor encontrado es de '+str(SumaValor))
-        
+
 if __name__ == '__main__':
     main()

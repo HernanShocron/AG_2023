@@ -1,6 +1,7 @@
 // Función para calcular la proporción entre dos números
 function calcularProporcion(a, b) {
-  return a / b;
+  if(a>b){ return a / b}
+  else  {return b / a}
 }
 
 // Función para verificar si una proporción cumple con la Proporción Dorada
@@ -56,6 +57,7 @@ function calcularYMostrarPromedios() {
   if (proporcionesDoradas.length === 0) {
     console.log("No se encontraron proporciones que cumplan con la Proporción Dorada en el DOM.");
   } else {
+    //console.log(`Promedio de todas las proporciones: ${proporciones}`);
     const sumaProporcionesDoradas = proporcionesDoradas.reduce((total, proporcion) => total + proporcion, 0);
     const promedioDorada = sumaProporcionesDoradas / proporcionesDoradas.length;
     console.log(`Promedio de proporciones que cumplen con la Proporción Dorada: ${promedioDorada}`);

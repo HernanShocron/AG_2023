@@ -41,7 +41,14 @@ function recorrerDOMyCalcularProporciones(elemento) {
 
   return { proporciones, proporcionesDoradas };
 }
-
+// Función para calcular el error entre el promedio total y la Proporción Dorada
+function calcularErrorPromedio(proporciones) {
+  const proporcionDorada = 1.61803398875;
+  const sumaProporciones = proporciones.reduce((total, proporcion) => total + proporcion, 0);
+  const promedioTotal = sumaProporciones / proporciones.length;
+  const error = Math.abs(promedioTotal - proporcionDorada);
+  return error;
+}
 // Función para calcular y mostrar los promedios
 function calcularYMostrarPromedios() {
   const { proporciones, proporcionesDoradas } = recorrerDOMyCalcularProporciones(document.body);
@@ -49,6 +56,8 @@ function calcularYMostrarPromedios() {
   if (proporciones.length === 0) {
     console.log("No se encontraron proporciones en el DOM.");
   } else {
+    const errorPromedioTotal = calcularErrorPromedio(proporciones);
+    console.log(`Error con respecto a la Proporción Dorada: ${errorPromedioTotal}`);
     const sumaProporciones = proporciones.reduce((total, proporcion) => total + proporcion, 0);
     const promedioTotal = sumaProporciones / proporciones.length;
     console.log(`Promedio de todas las proporciones: ${promedioTotal}`);

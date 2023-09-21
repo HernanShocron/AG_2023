@@ -31,6 +31,7 @@ function recorrerDOMyCalcularProporciones(elemento) {
 
     if (cumpleProporcionDorada(proporcion)) {
       proporcionesDoradas.push(proporcion);
+      elemento.style.backgroundColor = "red";
     }
 
     // Recorre los elementos hijos de forma recursiva
@@ -52,7 +53,8 @@ function calcularErrorPromedio(proporciones) {
 // Función para calcular y mostrar los promedios
 function calcularYMostrarPromedios() {
   const { proporciones, proporcionesDoradas } = recorrerDOMyCalcularProporciones(document.body);
-
+  const longitudProporciones = proporciones.length;
+  const longitudProporcionesDoradas = proporcionesDoradas.length;
   if (proporciones.length === 0) {
     console.log("No se encontraron proporciones en el DOM.");
   } else {
@@ -71,6 +73,9 @@ function calcularYMostrarPromedios() {
     const promedioDorada = sumaProporcionesDoradas / proporcionesDoradas.length;
     console.log(`Promedio de proporciones que cumplen con la Proporción Dorada: ${promedioDorada}`);
   }
+	console.log(`Cantidad de elementos: ${longitudProporciones}`);
+	console.log(`Cantidad de elementoss que cumplen con la Proporción Dorada: ${longitudProporcionesDoradas}`);
+	console.log(`Proporción de elementos que cumplen con la Proporción Dorada sobre el total: ${longitudProporcionesDoradas/longitudProporciones}`);
 }
 
 /*// Llamada para calcular los promedios después de que el DOM esté completamente cargado

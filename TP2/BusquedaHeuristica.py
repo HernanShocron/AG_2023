@@ -28,7 +28,7 @@ def ValuarObjetos(OBJETOS):
     for Objeto in OBJETOS:
         Valor = Objeto[2]/Objeto[1]
         ObjetosValuados.append([Objeto[0],Objeto[1],Objeto[2],Valor])
-        ObjetosValuados.sort(key = op.itemgetter(3),reverse = True)
+    ObjetosValuados.sort(key = op.itemgetter(3),reverse = True)
     return ObjetosValuados
 
 def main():

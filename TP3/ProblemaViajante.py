@@ -29,6 +29,7 @@ Agregar en el informe un apartado final denominado «Aportes Prácticos del TSP�
 Tomar por lo menos dos y explicarlas.'''
 
 from os import system
+import os 
 import numpy as np
 import openpyxl as Excel
 
@@ -57,9 +58,24 @@ class Constant :
         [21,'Santiago del Estero'                   ],
         [22,'Ushuaia'                               ],
         [23,'Viedma'                                ]))
-    ExcelDocument = Excel.load_workbook('Distancias.xlsx')
-    Sheet = ExcelDocument.get_sheet_by_name('PorRuta')
-   
+    cwd             = os.getcwd()
+    ExcelDocument   = Excel.load_workbook(cwd+'\TP3\Distancias.xlsx')
+    Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
+
+# Variable Globales
+Ciudades_Cercanas = []  # [Id_Ciudad_Inicial  1 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial  1 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial  1 | Id_Ciudad_Cercana 3 | Distancia 3]
+                        # [Id_Ciudad_Inicial  2 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial  2 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial  2 | Id_Ciudad_Cercana 3 | Distancia 3]
+                        # [Id_Ciudad_Inicial  3 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial  3 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial  3 | Id_Ciudad_Cercana 3 | Distancia 3]
+                        # ...
+                        # [Id_Ciudad_Inicial 23 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial 23 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial 23 | Id_Ciudad_Cercana 3 | Distancia 3]
+    
+Ciudades_Disponibles            = []
+Ciudades_Disponibles_Restantes  = []
+Distancia_Recorrida             = 0
+Descripcion_Recorrido           = ''
+Contador_Ciudades               = 0
+Recorridos                      = []
+
 def main():
     OPC = 0
     while OPC == 0:
@@ -105,27 +121,67 @@ def main():
                     Heuristico_Sin_Ciudad()
         case 3:
             Algoritmo_Genetico()
-    Constant.ExcelDocument.close
+    Constant.ExcelDocument.close()
 
-def Exhaustivo(N): # Pienso que aca hay que hacer según las diapositivas un "Branch and Bound" Limitando las busqueda de combinaciones solo a las N ciudades mas cercanas a la ciudad en estudio 
+# Pienso que aca hay que hacer según las diapositivas un "Branch and Bound" que limite las busqueda de combinaciones solo a las N ciudades mas cercanas a la ciudad en estudio.
+# Quizas 3 sea lo mejorcito porque ya vi que con 4 se pudre bastante, creo que esto se conoce como "podar las ramas del arbol"
+def Exhaustivo(N): 
     system("cls")
     print('Exhaustivo')
     print('')
-
-def N_Ciudades_Cercanas(N,Ciudad,Ciudades_Cercanas):
-    N_Ciudades_Cercanas = []
+    Cantidad_Combinaciones = N^23
     for i in range(1,23):
-        if i != Ciudad and N_Ciudades_Cercanas.count < N:
-            Ciudades_Cercanas.append(Constant.CIUDADES[i], Constant.Sheet.cell(row=Ciudad,column=i))
-        else:
-            Ciudades_Cercanas(i,N_Ciudades_Cercanas)
+        Ciudades_Disponibles.append(Constant.CIUDADES[i-1][0])
+        Ciudades_Cercanas.append(N_Ciudades_Cercanas(N,i))
 
-def Ciudades_Cercanas(I,Ciudad,Ciudades_Cercanas):
-    Kms = Constant.Sheet.cell(row=Ciudad,column=I)
-    for Ciudad_Item in Ciudades_Cercanas:
-        if Ciudad_Item[1] > Kms:
-            Ciudades_Cercanas
+    # Test para visualizar armado de Lista Ciudades_Cercanas : Está OK
+    '''for i in range(len(Ciudades_Cercanas)): 
+        print(Ciudades_Cercanas[i])'''
 
+    Recorridos = []
+    for i in range(1,23):
+        Ciudades_Disponibles_Restantes = Ciudades_Disponibles.copy()
+        Ciudades_Disponibles_Restantes.pop(i-1)
+        Contador_Ciudades     = 0
+        Distancia_Recorrida   = 0
+        Descripcion_Recorrido = ''
+        Viajar_a(N,i,i)
+    for Recorrido in Recorridos:
+        print(Recorrido)
+
+def N_Ciudades_Cercanas(N,Ciudad_Inicial):
+    N_Ciudades_Cercanas = [] # Id_Ciudad_Inicial | Id_Ciudad_Cercana | Distancia
+    for i in range(1,23):
+        if i != Ciudad_Inicial:
+            if len(N_Ciudades_Cercanas) <  N :
+                N_Ciudades_Cercanas.append([Ciudad_Inicial, int(Constant.CIUDADES[i-1][0]), Constant.Sheet.cell(row=Ciudad_Inicial,column=i).value])           
+            if len(N_Ciudades_Cercanas) >= N :
+                DistanciaMayor = 0
+                for j in range(len(N_Ciudades_Cercanas)):
+                    if N_Ciudades_Cercanas[j][2] > DistanciaMayor:
+                        DistanciaMayor = N_Ciudades_Cercanas[j][2]
+                        CiudadMasLejana = j
+                if Constant.Sheet.cell(row=Ciudad_Inicial,column=i).value < DistanciaMayor:
+                    N_Ciudades_Cercanas.pop(CiudadMasLejana)
+                    N_Ciudades_Cercanas.append([Ciudad_Inicial, int(Constant.CIUDADES[i-1][0]), Constant.Sheet.cell(row=Ciudad_Inicial,column=i).value])
+    return N_Ciudades_Cercanas
+                
+def Viajar_a(N,Id_Ciudad_Partida,Id_Ciudad_Actual):
+    for i in range(N):
+        Id_Ciudad_Destino       = int((Ciudades_Cercanas[Id_Ciudad_Actual-1][i])[1])
+        Contador_Ciudades       = Contador_Ciudades + 1
+        Distancia_Recorrida     = Distancia_Recorrida   + Constant.Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Destino).value
+        Descripcion_Recorrido   = Descripcion_Recorrido + Constant.CIUDADES[Id_Ciudad_Actual-1][0] + '->'
+        if Contador_Ciudades <  23:
+            if Id_Ciudad_Destino in Ciudades_Disponibles_Restantes:
+                Ciudades_Disponibles_Restantes.pop(Id_Ciudad_Destino-1)
+                Viajar_a(N,Id_Ciudad_Partida,Id_Ciudad_Destino)
+        if Contador_Ciudades == 23:
+            Distancia_Recorrida     = Distancia_Recorrida   + Constant.Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Partida).value
+            Descripcion_Recorrido   = Descripcion_Recorrido + Constant.CIUDADES[Id_Ciudad_Partida-1][0]
+            Recorridos.append([Descripcion_Recorrido,Distancia_Recorrida])
+
+    
 def Heuristico_Con_Ciudad(OPC):
     system("cls")
     print('Heuristico_Con_Ciudad')

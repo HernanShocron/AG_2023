@@ -32,6 +32,13 @@ from os import system
 import os 
 import numpy as np
 import openpyxl as Excel
+import random as r
+
+Ciudades_Disponibles = []
+Distancia_Recorrida = 0
+Descripcion_Recorrido = ''
+Id_Ciudad_Actual = 0
+Id_Ciudad_Cercana = 0
 
 class Constant :
     CIUDADES = np.array((
@@ -59,39 +66,22 @@ class Constant :
         [22,'Ushuaia'                               ],
         [23,'Viedma'                                ]))
     cwd             = os.getcwd()
-    ExcelDocument   = Excel.load_workbook(cwd+'\TP3\Distancias.xlsx')
+    ExcelDocument   = Excel.load_workbook(cwd+'\TP3\Distancias_Ruta.xlsx')
     Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
-
-# Variable Globales
-Ciudades_Cercanas = []  # [Id_Ciudad_Inicial  1 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial  1 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial  1 | Id_Ciudad_Cercana 3 | Distancia 3]
-                        # [Id_Ciudad_Inicial  2 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial  2 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial  2 | Id_Ciudad_Cercana 3 | Distancia 3]
-                        # [Id_Ciudad_Inicial  3 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial  3 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial  3 | Id_Ciudad_Cercana 3 | Distancia 3]
-                        # ...
-                        # [Id_Ciudad_Inicial 23 | Id_Ciudad_Cercana 1 | Distancia 1], [Id_Ciudad_Inicial 23 | Id_Ciudad_Cercana 2 | Distancia 2], [Id_Ciudad_Inicial 23 | Id_Ciudad_Cercana 3 | Distancia 3]
-    
-Ciudades_Disponibles            = []
-Ciudades_Disponibles_Restantes  = []
-Distancia_Recorrida             = 0
-Descripcion_Recorrido           = ''
-Contador_Ciudades               = 0
-Recorridos                      = []
 
 def main():
     OPC = 0
     while OPC == 0:
         system("cls")
         print('Problema del viajante')
-        print(' 1- Método Exhaustivo')
-        print(' 2- Método Heurístico')
-        print(' 3- Algorítmo Genético')
+        print(' 1- Método Heurístico')
+        print(' 2- Algorítmo Genético')
         print('')
         OPC = int(input('OPCIÓN: '))
-        if OPC > 3 or OPC < 0:
+        if OPC > 2 or OPC < 0:
             OPC = 0
     match OPC:
         case 1:
-            Exhaustivo(3)
-        case 2:
             OPC2 = 0
             while OPC2 == 0:
                 system("cls")
@@ -112,94 +102,91 @@ def main():
                         for ciudad in Constant.CIUDADES:
                             print(str(ciudad[0])+' - '+ciudad[1])
                         print('')
-                        input('OPCIÓN: ')
-                        OPC3 = input('Seleccione Opción: ')
+                        OPC3 = int(input('Seleccione Opción: '))
                         if OPC3 > 23 or OPC3 < 0:
                             OPC3 = 0
-                    Heuristico_Con_Ciudad(OPC3)
+                        else:
+                            Heuristico_Con_Ciudad(OPC3)
                 case 2:
                     Heuristico_Sin_Ciudad()
-        case 3:
+        case 2:
             Algoritmo_Genetico()
     Constant.ExcelDocument.close()
-
-# Pienso que aca hay que hacer según las diapositivas un "Branch and Bound" que limite las busqueda de combinaciones solo a las N ciudades mas cercanas a la ciudad en estudio.
-# Quizas 3 sea lo mejorcito porque ya vi que con 4 se pudre bastante, creo que esto se conoce como "podar las ramas del arbol"
-def Exhaustivo(N): 
-    system("cls")
-    print('Exhaustivo')
-    print('')
-    Cantidad_Combinaciones = N^23
-    for i in range(1,23):
-        Ciudades_Disponibles.append(Constant.CIUDADES[i-1][0])
-        Ciudades_Cercanas.append(N_Ciudades_Cercanas(N,i))
-
-    # Test para visualizar armado de Lista Ciudades_Cercanas : Está OK
-    '''for i in range(len(Ciudades_Cercanas)): 
-        print(Ciudades_Cercanas[i])'''
-
-    Recorridos = []
-    for i in range(1,23):
-        Ciudades_Disponibles_Restantes = Ciudades_Disponibles.copy()
-        Ciudades_Disponibles_Restantes.pop(i-1)
-        Contador_Ciudades     = 0
-        Distancia_Recorrida   = 0
-        Descripcion_Recorrido = ''
-        Viajar_a(N,i,i)
-    for Recorrido in Recorridos:
-        print(Recorrido)
-
-def N_Ciudades_Cercanas(N,Ciudad_Inicial):
-    N_Ciudades_Cercanas = [] # Id_Ciudad_Inicial | Id_Ciudad_Cercana | Distancia
-    for i in range(1,23):
-        if i != Ciudad_Inicial:
-            if len(N_Ciudades_Cercanas) <  N :
-                N_Ciudades_Cercanas.append([Ciudad_Inicial, int(Constant.CIUDADES[i-1][0]), Constant.Sheet.cell(row=Ciudad_Inicial,column=i).value])           
-            if len(N_Ciudades_Cercanas) >= N :
-                DistanciaMayor = 0
-                for j in range(len(N_Ciudades_Cercanas)):
-                    if N_Ciudades_Cercanas[j][2] > DistanciaMayor:
-                        DistanciaMayor = N_Ciudades_Cercanas[j][2]
-                        CiudadMasLejana = j
-                if Constant.Sheet.cell(row=Ciudad_Inicial,column=i).value < DistanciaMayor:
-                    N_Ciudades_Cercanas.pop(CiudadMasLejana)
-                    N_Ciudades_Cercanas.append([Ciudad_Inicial, int(Constant.CIUDADES[i-1][0]), Constant.Sheet.cell(row=Ciudad_Inicial,column=i).value])
-    return N_Ciudades_Cercanas
-                
-def Viajar_a(N,Id_Ciudad_Partida,Id_Ciudad_Actual):
-    for i in range(N):
-        Id_Ciudad_Destino       = int((Ciudades_Cercanas[Id_Ciudad_Actual-1][i])[1])
-        Contador_Ciudades       = Contador_Ciudades + 1
-        Distancia_Recorrida     = Distancia_Recorrida   + Constant.Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Destino).value
-        Descripcion_Recorrido   = Descripcion_Recorrido + Constant.CIUDADES[Id_Ciudad_Actual-1][0] + '->'
-        if Contador_Ciudades <  23:
-            if Id_Ciudad_Destino in Ciudades_Disponibles_Restantes:
-                Ciudades_Disponibles_Restantes.pop(Id_Ciudad_Destino-1)
-                Viajar_a(N,Id_Ciudad_Partida,Id_Ciudad_Destino)
-        if Contador_Ciudades == 23:
-            Distancia_Recorrida     = Distancia_Recorrida   + Constant.Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Partida).value
-            Descripcion_Recorrido   = Descripcion_Recorrido + Constant.CIUDADES[Id_Ciudad_Partida-1][0]
-            Recorridos.append([Descripcion_Recorrido,Distancia_Recorrida])
-
     
-def Heuristico_Con_Ciudad(OPC):
+def Heuristico_Con_Ciudad(Id_Ciudad_Seleccionada):
     system("cls")
     print('Heuristico_Con_Ciudad')
     print('')
+    print('Id_Ciudad_Seleccionada = '+str(Id_Ciudad_Seleccionada))
+    Heuristica(Id_Ciudad_Seleccionada)
 
 def Heuristico_Sin_Ciudad():
     system("cls")
     print('Heuristico_Sin_Ciudad')
     print('')
+    Id_Ciudad_Random = r.randint(1,23)
+    print('Id_Ciudad_Random = '+str(Id_Ciudad_Random))
+    Heuristica(Id_Ciudad_Random)
+    
+
+def Heuristica(Id_Ciudad_Inicial):
+    global Ciudades_Disponibles
+    global Id_Ciudad_Actual
+    global Id_Ciudad_Cercana
+    global Descripcion_Recorrido
+    global Distancia_Recorrida
+    Distancia_Recorrida = 0
+    Descripcion_Recorrido = ''
+    Id_Ciudad_Actual = Id_Ciudad_Inicial
+    for i in range(23):
+        Ciudades_Disponibles.append(i+1)
+    Ciudades_Disponibles.remove(Id_Ciudad_Actual)
+    Distancia_Recorrida   = 0
+    Descripcion_Recorrido = ''
+    Id_Ciudad_Cercana = Ciudad_Cercana_Disponible(Id_Ciudad_Actual)
+    for i in range(22):
+        Viajar_a()
+        Id_Ciudad_Actual = Id_Ciudad_Cercana
+        Id_Ciudad_Cercana = Ciudad_Cercana_Disponible(Id_Ciudad_Actual)
+    Id_Ciudad_Cercana = Id_Ciudad_Inicial
+    Ciudades_Disponibles.append(Id_Ciudad_Inicial)
+    print('Viajes de regreso------------------> '+str(Id_Ciudad_Cercana))
+    print(Ciudades_Disponibles)
+    Viajar_a()
+    Descripcion_Recorrido = Descripcion_Recorrido[:-1]
+    print('El recorrido '+Descripcion_Recorrido+' tiene un total de '+str(Distancia_Recorrida)+' Kms')
 
 def Algoritmo_Genetico():
     system("cls")
     print('Algoritmo_Genetico')
     print('')
 
+def Ciudad_Cercana_Disponible(Ciudad_Inicial):
+    global Ciudades_Disponibles
+    Distancia_Menor = 10000000
+    Ciudad_Mas_Cercana = 0
+    print('La ciduad Inicial es '+str(Ciudad_Inicial))
+    for Ciudad in Ciudades_Disponibles:
+        print('La ciudad '+str(Ciudad)+' se encuentra disponible')
+        Distancia = Constant.Sheet.cell(row = Ciudad_Inicial, column = Ciudad).value
+        if Distancia < Distancia_Menor:
+            Distancia_Menor = Distancia
+            Ciudad_Mas_Cercana = Ciudad
+    Ciudades_Disponibles.remove(Ciudad_Mas_Cercana)
+    print('Para '+str(Ciudad_Inicial)+' la ciudad más cercana es '+str(Ciudad_Mas_Cercana)+' con una distancia de '+str(Distancia_Menor)+' Kms')
+    return Ciudad_Mas_Cercana
+
+def Viajar_a():
+    global Id_Ciudad_Actual
+    global Id_Ciudad_Cercana
+    global Distancia_Recorrida
+    global Descripcion_Recorrido
+    print('Id_Ciudad_Partida = '+str(Id_Ciudad_Actual) + ' Id_Ciudad_Destino = '+str(Id_Ciudad_Cercana))
+    Distancia_Recorrida     += Constant.Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Cercana).value
+    Descripcion_Recorrido   += Constant.CIUDADES[Id_Ciudad_Actual-1][0] + '-'
+    print('Distancia_Recorrida = '+str(Distancia_Recorrida))
+    print('Descripcion_Recorrido = '+Descripcion_Recorrido)
+
 if __name__ == "__main__":
     main()
-
-
-
     

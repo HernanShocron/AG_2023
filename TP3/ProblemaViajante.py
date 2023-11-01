@@ -42,7 +42,7 @@ Id_Ciudad_Cercana = 0
 
 cwd             = os.getcwd()
 FileName        = 'Distancias_Ruta.xlsx'
-ExcelDocument   = Excel.load_workbook(cwd+'\TP3\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
+ExcelDocument   = Excel.load_workbook(cwd+'\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
 Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
 
 
@@ -76,10 +76,10 @@ class Constant :
 def main():
     global cwd
     global FileName
-    global ExcelDocument
+    global ExcelDoc1ument1
     global Sheet
 
-    ExcelDocument   = Excel.load_workbook(cwd+'\TP3\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
+    ExcelDocument   = Excel.load_workbook(cwd+'\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
     Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
     
     OPC = 0

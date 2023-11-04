@@ -33,7 +33,7 @@ import os
 import numpy as np
 import openpyxl as Excel
 import random as r
-
+import GeneticoCrossOver as CrossOver
 Ciudades_Disponibles = []
 Distancia_Recorrida = 0
 Descripcion_Recorrido = ''
@@ -220,7 +220,52 @@ def Algoritmo_Genetico():
     # Acá a diferencia de los TPs anteriores, en donde usabamos 1 o 0, vamos a tener que orientar el algoritmo a cromosomas del tipo ABCDEFGHIJKLMNOPQRSTUVW 
     # (23 LETRAS, Una para cada ciduad) ya que es importante saber el orden de como visita las ciudades
     Cromosomas = []
-    Cromosomas = Crear_Cromosomas_Iniciales(50)
+    Cromosomas = Crear_Cromosomas_Iniciales(50)  # llamada a la funcion que crea poblacion inicial
+    poblacion = Cromosomas
+    maximos = []
+    crom_max = []
+    minimos = []
+    promedios = []
+    elit =[]
+    # binario_COEF = np.binary_repr(Constant.COEF, 0)
+    cant_Genes = 23  # largo de los genes
+    print(poblacion )
+    for i in range(200):
+        resultados = []  # lista de las funciones objetivos de la poblacion actual
+    #    for j in range(len(poblacion)):
+    #         resultados.append(funcion_objetivo(poblacion[j]))
+
+    #     #calcula max, min y promedio
+    #     crom_max.append(poblacion[resultados.index(np.max(resultados))])
+    #     maximos.append(np.max(resultados))
+    #     minimos.append(np.min(resultados))
+    #     promedios.append(np.average(resultados))
+    #     print(poblacion)
+        
+    #     # poblacion, fitnae_pob, cant_elit ->elit
+    #     elit= Elitismo.elitismo(poblacion, Fitness.Fitness( resultados), Constant.ELIT) 
+    #     print(poblacion)
+    #     # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
+        
+    #     # poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
+    #     poblacion = torneo.torneo(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
+
+    #     # pob_selec,const_cross,largo_gen -> poblacion_hijos
+    
+        poblacion = CrossOver.CrossOver( poblacion, 0.752, cant_Genes)     
+        print() 
+        print(poblacion)
+        input()
+    #     # poblacion,const_mut,largo_gen -> poblacion final
+    #     poblacion = mutacion.mutar_poblacion(
+    #         poblacion, Constant.P_MUTACION, cant_Genes)
+        
+    #     #Agrega a la poblacion seleccionada los cromosomas elites
+    #     poblacion=poblacion+elit
+
+    # Graficar.Tabla(crom_max,maximos,minimos,promedios)
+    # Graficar.MAX_MIN_PROM(maximos,minimos,promedios)   
+
 
 def Ciudad_Cercana_Disponible(Ciudad_Inicial):
     global Ciudades_Disponibles

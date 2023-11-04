@@ -5,50 +5,51 @@ import random as rd
 def CrossOver(poblacion, probabilidad, cant_gen):
 
     lista = []
-
-    # for i in range(len(poblacion)):
-    #     # Convertir a lista de bits
-    #     lista.append(list(np.binary_repr(poblacion[i], width=cant_gen)))
-
+    poblacionAux= []
+    # convertir la poblacion de lista de string a lista de listas
+    for i in range(len(poblacion)):
+        poblacionAux.append(list(poblacion[i]))
+    poblacion = poblacionAux
     for i in range(0, len(poblacion), 2):
         if rd.random() <= probabilidad:
-            punto_inicio = 0  # Iniciamos en el índice 0 de "padre 1"
-            hijo1 = [-1] * cant_gen
-            hijo2 = [-1] * cant_gen
-            current = punto_inicio
+            #crea los hijos con el mismo tamaño de genes
+            hijo1 = ['z'] * cant_gen
+            hijo2 = ['z'] * cant_gen
 
-            # Proceso para el hijo 1
-            while True:
-                if hijo1[current] == -1:
-                    hijo1[current] = lista[i][current]
-                current = lista[i + 1].index(lista[i][current])
+            current = 0
+            hijo1[0] = poblacion[i][0]
+            hijo2[0] = poblacion[i + 1][0]
+            repite = False
+            #se repite asta que encuentre un valor que ya esta en el hijo
+            while repite == False:
+                #si el valor no esta en el hijo
+                if poblacion[i + 1][current] not in hijo1: 
+                    # guarda el valor dep padre2 en la posicion que esta en el padre1   
+                    hijo1[poblacion[i].index(poblacion[i + 1][current])] = poblacion[i + 1][current]
+                    current = poblacion[i].index(poblacion[i + 1][current])
+                else: #si el valor esta en el hijo
+                    repite = True
+            for j in range(len(hijo1)):
+                if hijo1[j] == 'z':
+                    hijo1[j] = poblacion[i + 1][j]
+            
+            #ahora generamaos el hijo2
+            repite = False
+            current = 0
+            while repite == False:
+                if poblacion[i][current] not in hijo2:
+                    hijo2[poblacion[i + 1].index(poblacion[i][current])] = poblacion[i][current]
+                    current = poblacion[i + 1].index(poblacion[i][current])
+                else:
+                    repite = True
 
-                if current == punto_inicio:
-                    break
-
-            # Completar los genes faltantes de hijo 1 con los de "padre 2"
-            for j in range(cant_gen):
-                if hijo1[j] == -1:
-                    hijo1[j] = lista[i + 1][j]
-
-            # Proceso para el hijo 2
-            current = punto_inicio
-            while True:
-                if hijo2[current] == -1:
-                    hijo2[current] = lista[i + 1][current]
-                current = lista[i].index(lista[i + 1][current])
-
-                if current == punto_inicio:
-                    break
-
-            # Completar los genes faltantes de hijo 2 con los de "padre 1"
-            for j in range(cant_gen):
-                if hijo2[j] == -1:
-                    hijo2[j] = lista[i][j]
-
-            lista[i] = hijo1
-            lista[i + 1] = hijo2
-
-    # # Convertir de nuevo a decimal
-    # lista_decimal = [int(''.join(gen), 2) for gen in lista]
+            for j in range(len(hijo2)):
+                if hijo2[j] == 'z':
+                    hijo2[j] = poblacion[i][j]
+            
+            lista.append(hijo1)
+            lista.append(hijo2)
+    lista = ["".join(i) for i in lista]
+   
     return lista
+

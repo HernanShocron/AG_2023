@@ -40,11 +40,14 @@ Descripcion_Recorrido = ''
 Id_Ciudad_Actual = 0
 Id_Ciudad_Cercana = 0
 
-cwd             = os.getcwd()
-FileName        = 'Distancias_Ruta.xlsx'
-ExcelDocument   = Excel.load_workbook(cwd+'\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
-Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
+cwd             = os.getcwd()               # Creo que aca depende donde estamos apuntando el espacio de trabajo actualmente...
+                                            # En mi caso, de una PC a otro me difiere el espacio de trabajo de TP3 a AG_2023/TP3
+                                            # En caso de error en la consola aparece a donde esta apuntando el entorno
+                                            # para sus pruebas editar el valor de la variable ExcelDocument en una de las primeras lineas del main() para que apunte bien
+                                            # CONSIDERACIÓN: Quizas habría que investigar para encontra algo mejor como un proceso que devuelva la ubicacion del programa actual
 
+FileName        = 'Distancias_Ruta.xlsx'    # Yo me arme esta tabla excel con distancias por ruta. si quieren usar la que brinda la catedra hay que meterla en la carpeta del proyecto y apuntar ahi
+                                            # O quizas crear una solapa en el actual archivo xlsx y apuntar a esa solapa. Pineso que de esta manera hacemos un aporte a la materia (le regalamos el excel para futuras generaciones)                                          
 
 class Constant : 
     CIUDADES = np.array((
@@ -76,10 +79,10 @@ class Constant :
 def main():
     global cwd
     global FileName
-    global ExcelDoc1ument1
+    global ExcelDocument
     global Sheet
 
-    ExcelDocument   = Excel.load_workbook(cwd+'\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
+    ExcelDocument   = Excel.load_workbook(cwd+'\TP3\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
     Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
     
     OPC = 0
@@ -216,6 +219,8 @@ def Algoritmo_Genetico():
     print('')
     # Acá a diferencia de los TPs anteriores, en donde usabamos 1 o 0, vamos a tener que orientar el algoritmo a cromosomas del tipo ABCDEFGHIJKLMNOPQRSTUVW 
     # (23 LETRAS, Una para cada ciduad) ya que es importante saber el orden de como visita las ciudades
+    Cromosomas = []
+    Cromosomas = Crear_Cromosomas_Iniciales(50)
 
 def Ciudad_Cercana_Disponible(Ciudad_Inicial):
     global Ciudades_Disponibles
@@ -234,6 +239,43 @@ def Ciudad_Cercana_Disponible(Ciudad_Inicial):
     #print('Para '+str(Ciudad_Inicial)+' la ciudad más cercana es '+str(Ciudad_Mas_Cercana)+' con una distancia de '+str(Distancia_Menor)+' Kms')
     return Ciudad_Mas_Cercana
 
+def Crear_Cromosomas_Iniciales(Cantidad_Cromosomas):
+    Cromosomas = []
+    Contador = 0
+    while Contador < Cantidad_Cromosomas:
+        Cromosoma = ''
+        Ciudades_Disponibles = []
+        for i in range(23):
+            Ciudades_Disponibles.append(i+1)
+        #print('Ciudades Disponibles ('+str(len(Ciudades_Disponibles))+'):')
+        #print(Ciudades_Disponibles)
+        while len(Ciudades_Disponibles) != 0:
+            Posicion_Random = r.randint(0,len(Ciudades_Disponibles)-1)
+            #print('Posicion_Random = '+str(Posicion_Random))
+            Id_Ciudad_Random = Ciudades_Disponibles[Posicion_Random]
+            #print('Id_Ciudad_Random = '+str(Id_Ciudad_Random))
+            Ciudad_Random = Constant.CIUDADES[Id_Ciudad_Random-1]
+            #print(Ciudad_Random)
+            Gen = Ciudad_Random[0]
+            #print('Gen = '+Gen)
+            Cromosoma += Gen
+            #print('cromosoma = '+cromosoma)
+            Ciudades_Disponibles.pop(Posicion_Random)
+            #print('')
+            #print('Ciudades Disponibles ('+str(len(Ciudades_Disponibles))+'):')
+            #print(Ciudades_Disponibles)
+        if not(Cromosoma in Cromosomas):
+            Cromosomas.append(Cromosoma)
+            Contador+=1
+    return Cromosomas
+    #Contador = 0
+    #for Cromosoma in Cromosomas:
+        #Contador+=1
+        #print(str(Contador)+' - '+cromosoma)
+
+
+
+            
 if __name__ == "__main__":
     main()
     

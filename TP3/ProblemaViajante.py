@@ -34,6 +34,11 @@ import numpy as np
 import openpyxl as Excel
 import random as r
 import GeneticoCrossOver as CrossOver
+import GeneticoRuleta as Ruleta
+import GeneticoFitness as Fitness
+import Geneticotorneo as Torneo
+import GeneticoGraficar as Graficar
+import GeneticoElitismo as Elitismo
 Ciudades_Disponibles = []
 Distancia_Recorrida = 0
 Descripcion_Recorrido = ''
@@ -74,7 +79,8 @@ class Constant :
         ['U','Santiago del Estero'                   ],
         ['V','Ushuaia'                               ],
         ['W','Viedma'                                ]))
-    
+    ELIT = 2 
+    POBLACION_INICIAL = 50
 
 def main():
     global cwd
@@ -229,42 +235,42 @@ def Algoritmo_Genetico():
     elit =[]
     # binario_COEF = np.binary_repr(Constant.COEF, 0)
     cant_Genes = 23  # largo de los genes
-    print(poblacion )
+    #print(poblacion )
     for i in range(200):
         resultados = []  # lista de las funciones objetivos de la poblacion actual
-    #    for j in range(len(poblacion)):
-    #         resultados.append(funcion_objetivo(poblacion[j]))
+        for j in range(len(poblacion)):
+             resultados.append(Funcion_Objetivo(poblacion[j]))
 
-    #     #calcula max, min y promedio
-    #     crom_max.append(poblacion[resultados.index(np.max(resultados))])
-    #     maximos.append(np.max(resultados))
-    #     minimos.append(np.min(resultados))
-    #     promedios.append(np.average(resultados))
-    #     print(poblacion)
+         #calcula max, min y promedio
+        crom_max.append(poblacion[resultados.index(np.max(resultados))])
+        maximos.append(np.max(resultados))
+        minimos.append(np.min(resultados))
+        promedios.append(np.average(resultados))
+        #print(poblacion)
         
     #     # poblacion, fitnae_pob, cant_elit ->elit
-    #     elit= Elitismo.elitismo(poblacion, Fitness.Fitness( resultados), Constant.ELIT) 
+        elit= Elitismo.elitismo(poblacion, Fitness.Fitness( resultados), Constant.ELIT) 
     #     print(poblacion)
     #     # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
         
-    #     # poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
+        poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
     #     poblacion = torneo.torneo(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
 
     #     # pob_selec,const_cross,largo_gen -> poblacion_hijos
     
         poblacion = CrossOver.CrossOver( poblacion, 0.752, cant_Genes)     
         print() 
-        print(poblacion)
-        input()
+        #input()
     #     # poblacion,const_mut,largo_gen -> poblacion final
     #     poblacion = mutacion.mutar_poblacion(
     #         poblacion, Constant.P_MUTACION, cant_Genes)
         
     #     #Agrega a la poblacion seleccionada los cromosomas elites
-    #     poblacion=poblacion+elit
+        poblacion=poblacion+elit
+        print(poblacion)
 
-    # Graficar.Tabla(crom_max,maximos,minimos,promedios)
-    # Graficar.MAX_MIN_PROM(maximos,minimos,promedios)   
+    Graficar.Tabla(crom_max,maximos,minimos,promedios)
+    Graficar.MAX_MIN_PROM(maximos,minimos,promedios)   
 
 
 def Ciudad_Cercana_Disponible(Ciudad_Inicial):
@@ -320,20 +326,33 @@ def Crear_Cromosomas_Iniciales(Cantidad_Cromosomas):
 
 def Funcion_Objetivo(Cromosoma):
     distancia = 0
+    ciudad_inicial = 0
+    ciudad_final = 0
     for i in range(0,22):
         ciudad_actual = 0
         ciudad_proxima = 0
         for j in range(0, 23):
             if Cromosoma[i] == Constant.CIUDADES[j][0]:
                 ciudad_actual = j+1
+                if i == 0:
+                    ciudad_inicial = j+1
                 break
         for j in range(0, 23):
             if Cromosoma[i+1] == Constant.CIUDADES[j][0]:
                 ciudad_proxima = j+1
+                if i == 21:
+                    ciudad_final = j+1
                 break
         distancia += Sheet.cell(row=ciudad_actual,column=ciudad_proxima).value
-    
+
+    distancia += Sheet.cell(row=ciudad_inicial,column=ciudad_final).value
     return distancia
+
+global ExcelDocument
+global Sheet
+
+ExcelDocument   = Excel.load_workbook(cwd+'\TP3\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
+Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
 
 if __name__ == "__main__":
     main()

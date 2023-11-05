@@ -1,5 +1,4 @@
 import random
-import Fitness
 
 def torneo(array_pobl, array_fitn, cantSelecciones):   # pide como parametro la poblacion inicial y su correspondiente valor en fitness
     nuevoarray = []

@@ -23,6 +23,8 @@ def mutacion(cromosoma, p_mutacion):
 
         return(newString)
 
+    return cromosoma
+
 
 def mutar_poblacion(poblacion, p_mutacion):
     poblacion_final = []

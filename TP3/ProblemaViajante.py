@@ -85,7 +85,7 @@ def main():
     ExcelDocument   = Excel.load_workbook(cwd+'\TP3\ '.strip() +FileName)  # Strip es para quitar los espacios en blanco, python no me deja poner la barra invertida al final de la cadena
     Sheet           = ExcelDocument.get_sheet_by_name('PorRuta')
     
-    OPC = 0
+    OPC = 0 
     while OPC == 0:
         system("cls")
         print('Problema del viajante')
@@ -318,9 +318,23 @@ def Crear_Cromosomas_Iniciales(Cantidad_Cromosomas):
         #Contador+=1
         #print(str(Contador)+' - '+cromosoma)
 
+def Funcion_Objetivo(Cromosoma):
+    distancia = 0
+    for i in range(0,22):
+        ciudad_actual = 0
+        ciudad_proxima = 0
+        for j in range(0, 23):
+            if Cromosoma[i] == Constant.CIUDADES[j][0]:
+                ciudad_actual = j+1
+                break
+        for j in range(0, 23):
+            if Cromosoma[i+1] == Constant.CIUDADES[j][0]:
+                ciudad_proxima = j+1
+                break
+        distancia += Sheet.cell(row=ciudad_actual,column=ciudad_proxima).value
+    
+    return distancia
 
-
-            
 if __name__ == "__main__":
     main()
     

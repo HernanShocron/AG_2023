@@ -134,7 +134,7 @@ def main():
                         else:
                             Heuristico_Con_Ciudad(OPC3)
                             ExcelDocument.save(Constant.CIUDADES[Id_Ciudad_Actual-1][1]+'_'+FileName)
-                            ExcelDocument.close()                          
+                            ExcelDocument.close()
                 case 2:
                     Heuristico_Sin_Ciudad()
                     ExcelDocument.save(Constant.CIUDADES[Id_Ciudad_Actual-1][1]+'_'+FileName)

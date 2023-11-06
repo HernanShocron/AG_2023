@@ -41,7 +41,7 @@ if __name__ == "__main__":
     elit =[]
     binario_COEF = np.binary_repr(Constant.COEF, 0)
     cant_Genes = len(binario_COEF)  # largo de los genes
-    print(cant_Genes)
+    #print(cant_Genes)
     for i in range(Constant.CICLOS_PROGRAMA):
         resultados = []  # lista de las funciones objetivos de la poblacion actual
         for j in range(len(poblacion)):
@@ -52,11 +52,11 @@ if __name__ == "__main__":
         maximos.append(np.max(resultados))
         minimos.append(np.min(resultados))
         promedios.append(np.average(resultados))
-        print(poblacion)
+        #print(poblacion)
         
         # poblacion, fitnae_pob, cant_elit ->elit
         elit= Elitismo.elitismo(poblacion, Fitness.Fitness( resultados), Constant.ELIT) 
-        print(poblacion)
+        #print(poblacion)
         # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
         
         # poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)

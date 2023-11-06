@@ -36,10 +36,11 @@ import random as r
 import GeneticoCrossOver as CrossOver
 import GeneticoRuleta as Ruleta
 import GeneticoFitness as Fitness
-import GeneticoTorneo as Torneo
+import Geneticotorneo as Torneo
 import GeneticoGraficar as Graficar
 import GeneticoElitismo as Elitismo
-import GeneticoMutacion as Mutacion
+import Geneticomutacion as Mutacion
+import GraficarMapa as Map
 
 Ciudades_Disponibles = []
 Distancia_Recorrida = 0
@@ -237,7 +238,7 @@ def Algoritmo_Genetico():
     Cromosomas = Crear_Cromosomas_Iniciales(50)  # llamada a la funcion que crea poblacion inicial
     poblacion = Cromosomas
     maximos = []
-    crom_max = []
+    mejores = []
     minimos = []
     promedios = []
     elit =[]
@@ -249,36 +250,48 @@ def Algoritmo_Genetico():
         for j in range(len(poblacion)):
             resultados.append(Funcion_Objetivo(poblacion[j]))
 
-         #calcula max, min y promedio
-        crom_max.append(poblacion[resultados.index(np.max(resultados))])
+        # calcula max, min y promedio
+        mejores.append(poblacion[resultados.index(np.min(resultados))])
         maximos.append(np.max(resultados))
         minimos.append(np.min(resultados))
         promedios.append(np.average(resultados))
-        #print(poblacion)
+        # print(poblacion)
         
-    #     # poblacion, fitnae_pob, cant_elit ->elit
+        # poblacion, fitnae_pob, cant_elit ->elit
         elit = Elitismo.elitismo(poblacion, Fitness.Fitness(resultados), Constant.ELIT) 
-    #     print(poblacion)
-    #     # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
+        #print(poblacion)
+        # poblacion,fitnes_de_pob,cant_selecciones -> poblacionseleccionada
         
         poblacion = Ruleta.seleccion(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
-    #     poblacion = torneo.torneo(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
+        #poblacion = torneo.torneo(poblacion, Fitness.Fitness(resultados), Constant.POBLACION_INICIAL - Constant.ELIT)
 
-    #     # pob_selec,const_cross,largo_gen -> poblacion_hijos
+        # pob_selec,const_cross,largo_gen -> poblacion_hijos
     
         poblacion = CrossOver.CrossOver(poblacion, 0.752, cant_Genes)
-        print()
+        #print()
         #input()
-    #     # poblacion,const_mut,largo_gen -> poblacion final
+        # poblacion,const_mut,largo_gen -> poblacion final
         poblacion = Mutacion.mutar_poblacion(poblacion, Constant.P_MUTACION)
         
-    #     #Agrega a la poblacion seleccionada los cromosomas elites
+        #Agrega a la poblacion seleccionada los cromosomas elites
         poblacion=poblacion+elit
-        print(poblacion)
+        #print(poblacion)
 
-    Graficar.Tabla(crom_max,maximos,minimos,promedios)
+    Graficar.Tabla(mejores,maximos,minimos,promedios)
     Graficar.MAX_MIN_PROM(maximos,minimos,promedios)   
-
+    RecorridoFinal = mejores[199]
+    Reccorrido = []
+    Iteracion = 0
+    for char in RecorridoFinal:
+        Iteracion += 1
+        for Posicion_Ciudad in range(len(Constant.CIUDADES)):
+            if char == Constant.CIUDADES[Posicion_Ciudad][0]:
+                Reccorrido.append(Posicion_Ciudad)
+                if Iteracion == 1:
+                    Posicion_Inicial = Posicion_Ciudad
+    Reccorrido.append(Posicion_Inicial) # CUIDADO, TUVE QUE HAER ESTO PORQUE EL STRING QUE DEVUELVE NO CONTEMPLA LA VUELTA A LA CIUDAD INICIAL. PUEDE QUE HAYA ERROR DE CALCULO. REVISAR
+    print(Reccorrido)
+    Map.Graficar_Reccorrido(Reccorrido)
 
 def Ciudad_Cercana_Disponible(Ciudad_Inicial):
     global Ciudades_Disponibles
@@ -289,7 +302,7 @@ def Ciudad_Cercana_Disponible(Ciudad_Inicial):
         #print('La ciudad '+str(Ciudad)+' se encuentra disponible')
         Distancia = Sheet.cell(row = Ciudad_Inicial, column = Ciudad).value
 
-        print(Distancia)
+        #print(Distancia)
 
         if Distancia < Distancia_Menor:
             Distancia_Menor = Distancia
@@ -358,6 +371,23 @@ def Funcion_Objetivo(Cromosoma):
     distancia += Sheet.cell(row=ciudad_inicial,column=ciudad_final).value
     return distancia
 
-
 if __name__ == "__main__":
-    main()  
+    main()
+
+
+
+    '''
+    # PRUEBA DE GRAFICO DE MAPA
+    # BASICAMENTE TRANSFORMO LO QUE ES EL MEJOR STRING ENCONTRADO A UNA LISTA QUE PUEDA INTERPRETAR EL PROCESO
+    RecorridoFinal = 'ABCDEFGHIJKLMNOPQRSTUVWA'
+    Reccorrido = []
+    for char in RecorridoFinal:
+        #print(char)
+        for Posicion_Ciudad in range(len(Constant.CIUDADES)):
+            if char == Constant.CIUDADES[Posicion_Ciudad][0]:
+                #print(Constant.CIUDADES[Posicion_Ciudad])
+                Reccorrido.append(Posicion_Ciudad)
+    print('El recorrido final es:')
+    print(Reccorrido)
+    Map.Graficar_Reccorrido(Reccorrido)
+    '''

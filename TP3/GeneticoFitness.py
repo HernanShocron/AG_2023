@@ -3,16 +3,19 @@ import ProblemaViajante as viajante
 
 def Fitness(resultados): # resultados de funcion objetivo -> 
     fitness1 = []
-    fitness2 = []
     total = np.sum(resultados)      
     for i in range(len(resultados)):
         fitness1.append((total/resultados[i])) #calculamos el reciproco del fitness, de modo que las distancias menores tienen mejores valores
+
+    fitness2 = []
     total2 = np.sum(fitness1)
     for i in range(len(resultados)):
         fitness2.append((fitness1[i]/total2)) # calculamos el fitness usando los valores del fitness anterior para tener valores < 1
+
     #print(fitness1)
     #print(fitness2)
     #print(np.sum(fitness2))
+
     return fitness2
 
 '''

@@ -193,17 +193,20 @@ def Heuristica(Id_Ciudad_Inicial):
 
     Distancia_Recorrida = 0
     Descripcion_Recorrido = ''
+    RecorridoFinal = []
     my_red      = Excel.styles.colors.Color(rgb='00FF0000')
     my_green    = Excel.styles.colors.Color(rgb='0000FF00')
     fillRed     = Excel.styles.fills.PatternFill(patternType='solid', fgColor=my_red)
     fillGreen   = Excel.styles.fills.PatternFill(patternType='solid', fgColor=my_green)
 
+    
     for i in range(23):
         Ciudades_Disponibles.append(i+1)
     Ciudades_Disponibles.remove(Id_Ciudad_Inicial)
     Distancia_Recorrida   = 0
     Descripcion_Recorrido = ''
     Id_Ciudad_Actual = Id_Ciudad_Inicial
+    RecorridoFinal.append(Id_Ciudad_Actual-1)
     Id_Ciudad_Cercana = Ciudad_Cercana_Disponible(Id_Ciudad_Actual)
     for i in range(22):
         Distancia_Recorrida     += Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Cercana).value
@@ -211,8 +214,10 @@ def Heuristica(Id_Ciudad_Inicial):
         Sheet.cell(row=Id_Ciudad_Actual,column=Id_Ciudad_Cercana).fill = fillRed
         Descripcion_Recorrido   += '('+Constant.CIUDADES[Id_Ciudad_Actual-1][0]+') ' + Constant.CIUDADES[Id_Ciudad_Actual-1][1] + ' -> '
         Id_Ciudad_Actual = Id_Ciudad_Cercana
-        Id_Ciudad_Cercana = Ciudad_Cercana_Disponible(Id_Ciudad_Actual)
+        RecorridoFinal.append(Id_Ciudad_Cercana-1)
+        Id_Ciudad_Cercana = Ciudad_Cercana_Disponible(Id_Ciudad_Actual)   
     Id_Ciudad_Cercana = Id_Ciudad_Inicial
+    RecorridoFinal.append(Id_Ciudad_Inicial-1)
     Ciudades_Disponibles.append(Id_Ciudad_Inicial)
     #print('Viajes de regreso------------------> '+str(Id_Ciudad_Cercana))
     #print(Ciudades_Disponibles)
@@ -227,6 +232,8 @@ def Heuristica(Id_Ciudad_Inicial):
     print('')
     print('TOTAL KMS Recorridos: '+str(Distancia_Recorrida)+' Kms')
     print('')
+    print(RecorridoFinal)
+    Map.Graficar_Reccorrido(RecorridoFinal)
 
 def Algoritmo_Genetico():
     system("cls")
@@ -280,18 +287,18 @@ def Algoritmo_Genetico():
     Graficar.Tabla(mejores,maximos,minimos,promedios)
     Graficar.MAX_MIN_PROM(maximos,minimos,promedios)   
     RecorridoFinal = mejores[199]
-    Reccorrido = []
+    Recorrido = []
     Iteracion = 0
     for char in RecorridoFinal:
         Iteracion += 1
         for Posicion_Ciudad in range(len(Constant.CIUDADES)):
             if char == Constant.CIUDADES[Posicion_Ciudad][0]:
-                Reccorrido.append(Posicion_Ciudad)
+                Recorrido.append(Posicion_Ciudad)
                 if Iteracion == 1:
                     Posicion_Inicial = Posicion_Ciudad
-    Reccorrido.append(Posicion_Inicial) # CUIDADO, TUVE QUE HAER ESTO PORQUE EL STRING QUE DEVUELVE NO CONTEMPLA LA VUELTA A LA CIUDAD INICIAL. PUEDE QUE HAYA ERROR DE CALCULO. REVISAR
-    print(Reccorrido)
-    Map.Graficar_Reccorrido(Reccorrido)
+    Recorrido.append(Posicion_Inicial) # CUIDADO, TUVE QUE HAER ESTO PORQUE EL STRING QUE DEVUELVE NO CONTEMPLA LA VUELTA A LA CIUDAD INICIAL. PUEDE QUE HAYA ERROR DE CALCULO. REVISAR
+    print(Recorrido)
+    Map.Graficar_Reccorrido(Recorrido)
 
 def Ciudad_Cercana_Disponible(Ciudad_Inicial):
     global Ciudades_Disponibles

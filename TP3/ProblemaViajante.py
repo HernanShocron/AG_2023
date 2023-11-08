@@ -119,9 +119,10 @@ def main():
                 print('Método Heurístico')
                 print(' 1 - Con ciudad inicial')
                 print(' 2 - Sin ciudad inicial')
+                print(' 3 - Distancia mínima')
                 print('')
                 OPC2 = int(input('OPCIÓN: '))
-                if OPC2 > 2 or OPC2 < 0:
+                if OPC2 > 3 or OPC2 < 0:
                     print('Opción Incorrecta, vuelva a intentar...')
                     OPC2 = 0
             match OPC2:
@@ -148,6 +149,24 @@ def main():
                     Heuristico_Sin_Ciudad()
                     ExcelDocument.save(Constant.CIUDADES[Id_Ciudad_Actual-1][1]+'_'+FileName)
                     ExcelDocument.close()
+                case 3:
+                    system("cls")
+
+                    resultados = []
+
+                    for i in range(0,23):
+                        resultados.append(Heuristica(i+1))
+
+                    recorridoMin = resultados[0][0]
+                    distanciaMin = resultados[0][1]
+
+                    for i in range(1,23):
+                        if resultados[i][0] < recorridoMin:
+                            recorridoMin = resultados[i][0]
+                            distanciaMin = resultados[i][1]
+                    
+                    print('La distancia Minima es ', distanciaMin)
+                    print('El recorrido Minimo es ', recorridoMin)  
         case 2:
             Algoritmo_Genetico()
     Volver_Menu()
@@ -191,6 +210,12 @@ def Heuristica(Id_Ciudad_Inicial):
     global Descripcion_Recorrido
     global Distancia_Recorrida
 
+    Ciudades_Disponibles = []
+    Distancia_Recorrida = 0
+    Descripcion_Recorrido = ''
+    Id_Ciudad_Actual = 0
+    Id_Ciudad_Cercana = 0
+
     Distancia_Recorrida = 0
     Descripcion_Recorrido = ''
     RecorridoFinal = []
@@ -232,8 +257,9 @@ def Heuristica(Id_Ciudad_Inicial):
     print('')
     print('TOTAL KMS Recorridos: '+str(Distancia_Recorrida)+' Kms')
     print('')
-    print(RecorridoFinal)
+    print(RecorridoFinal)    
     Map.Graficar_Reccorrido(RecorridoFinal)
+    return(Distancia_Recorrida,Descripcion_Recorrido)
 
 def Algoritmo_Genetico():
     system("cls")

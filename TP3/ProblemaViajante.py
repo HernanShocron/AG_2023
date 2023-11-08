@@ -298,6 +298,11 @@ def Algoritmo_Genetico():
                     Posicion_Inicial = Posicion_Ciudad
     Recorrido.append(Posicion_Inicial) # CUIDADO, TUVE QUE HAER ESTO PORQUE EL STRING QUE DEVUELVE NO CONTEMPLA LA VUELTA A LA CIUDAD INICIAL. PUEDE QUE HAYA ERROR DE CALCULO. REVISAR
     print(Recorrido)
+    Descripcion_Recorrido = '(' + Constant.CIUDADES[Recorrido[0]][0]+') ' + Constant.CIUDADES[Recorrido[0]][1]
+    for i in range(1, len(Recorrido)):
+        Descripcion_Recorrido += ' -> (' + Constant.CIUDADES[Recorrido[i]][0]+') ' + Constant.CIUDADES[Recorrido[i]][1]
+    print(Descripcion_Recorrido)
+    print('Distancia: ' + str(minimos[199]) + ' Km')
     Map.Graficar_Reccorrido(Recorrido)
 
 def Ciudad_Cercana_Disponible(Ciudad_Inicial):
